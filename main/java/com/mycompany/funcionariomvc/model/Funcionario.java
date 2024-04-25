@@ -4,6 +4,8 @@
  */
 package com.mycompany.funcionariomvc.model;
 
+import java.util.Date;
+
 /**
  *
  * @author rafaelamoreira
@@ -44,6 +46,9 @@ public class Funcionario {
     }
 
     public void setIdade(int idade) {
+        this.idade = idade;
+    }
+    public void setIdade(Date data) {
         this.idade = idade;
     }
 

@@ -6,15 +6,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author rafaelamoreira
  */
 public class FuncionarioDAO {
-
+    private static Map<Integer, Funcionario> funcionarios = new HashMap<>();
+    
     public static List<Funcionario> getFuncionarios() {
+        /*
         Connection conn = DBConnection.getInstance().getConnection();
         List<Funcionario> obj = new ArrayList<>();
         try {
@@ -30,9 +34,17 @@ public class FuncionarioDAO {
         } catch (SQLException e) {
         }
         return obj;
+        */
+        List<Funcionario> obj = new ArrayList<>();
+        funcionarios.values().forEach((f) -> {
+            obj.add(f);
+        });
+        return obj;
+        
     }
 
     public static void salvarFuncionario(Funcionario f) {
+        /*
         Connection conn = DBConnection.getInstance().getConnection();
         try {
             String sql = "insert into funcionario (id, nome, idade, salario) values (?, ?, ?,?)";
@@ -46,9 +58,12 @@ public class FuncionarioDAO {
 
         } catch (SQLException e) {
         }
+        */
+        funcionarios.put(f.getId(), f);
     }
 
     public static int buscaCodigo() {
+        /* 
         Connection conn = DBConnection.getInstance().getConnection();
         int id = 0;
         try {
@@ -61,5 +76,7 @@ public class FuncionarioDAO {
         } catch (SQLException e) {
         }
         return id;
+        */
+        return funcionarios.size()+1;
     }
 }

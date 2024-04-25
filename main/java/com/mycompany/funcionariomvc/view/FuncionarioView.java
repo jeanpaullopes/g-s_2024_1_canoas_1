@@ -12,23 +12,23 @@ import java.util.Scanner;
 public class FuncionarioView {
     
     private Scanner scan;
-    private List<Funcionario> funcionarios;
+    //private List<Funcionario> funcionarios;
     /**
      * Construtor da Classe Funcionario
-     * @param funcionarios 
+     * 
      */
-    public FuncionarioView(List<Funcionario> funcionarios) {
-        this.funcionarios = funcionarios;
+    public FuncionarioView() {
+        
     }
     /**
      * Listar os funcionarios cadastrados
      */
-    public void listarFuncionarios() {
+    public void listarFuncionarios(List<Funcionario> funcionarios) {
         System.out.println("---------------------------");
         System.out.println("Funcionarios:");
         System.out.println("---------------------------"); 
          
-        for (Funcionario f : this.funcionarios) {
+        for (Funcionario f : funcionarios) {
             System.out.println(f.toString());
             System.out.println("---------------------------");
         }

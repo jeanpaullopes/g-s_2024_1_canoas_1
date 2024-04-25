@@ -23,7 +23,7 @@ public class AppController {
 
     public AppController() {
         this.funcionarios = FuncionarioDAO.getFuncionarios();
-        this.fv = new FuncionarioView(funcionarios);
+        this.fv = new FuncionarioView();
         this.fc = new FuncionarioController(fv, funcionarios);
     }
 
@@ -41,7 +41,7 @@ public class AppController {
                     break;
                 case 2: // listar funcionarios
                     if (!funcionarios.isEmpty()) {
-                        fv.listarFuncionarios();
+                        fv.listarFuncionarios(this.funcionarios);
                     } else {
                         AppView.mostraMsgListaVazia();
                     }
@@ -66,18 +66,8 @@ public class AppController {
                                 break;
 
                             case 2: // aniversario 
-                                id = fv.defineFuncionario();
-                                if (!funcionarios.isEmpty()) {
-                                    if ((id - 1) < funcionarios.size()) {
-                                        fc.fazerAniversario(funcionarios.get(id - 1));
-                                        fv.mostraMsgAniversario(funcionarios.get(id - 1));
-                                    } else {
-                                        AppView.mostraMsgNaoEncontrado();
-                                    }
-                                } else {
-                                    AppView.mostraMsgListaVazia();
-                                }
-                                break;
+                                fc.operacaoFazerAniversario();
+                               break;
                             case 3: // promover
                                 id = fv.defineFuncionario();
                                 if (!funcionarios.isEmpty()) {

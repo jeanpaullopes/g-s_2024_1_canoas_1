@@ -7,6 +7,7 @@ package com.mycompany.funcionariomvc.controller;
 import com.mycompany.funcionariomvc.DAO.FuncionarioDAO;
 import com.mycompany.funcionariomvc.model.Funcionario;
 import com.mycompany.funcionariomvc.model.RegraNegocio;
+import com.mycompany.funcionariomvc.view.AppView;
 import com.mycompany.funcionariomvc.view.FuncionarioView;
 import java.util.List;
 
@@ -47,7 +48,20 @@ public class FuncionarioController {
         }
         return status;
     }
-
+    public boolean operacaoFazerAniversario() {
+                   int id = fv.defineFuncionario();
+                                if (!funcionarios.isEmpty()) {
+                                    if ((id - 1) < funcionarios.size()) {
+                                        fazerAniversario(funcionarios.get(id - 1));
+                                        fv.mostraMsgAniversario(funcionarios.get(id - 1));
+                                    } else {
+                                        AppView.mostraMsgNaoEncontrado();
+                                    }
+                                } else {
+                                    AppView.mostraMsgListaVazia();
+                                }
+                     return true;
+    }
     public void aumentarSalario(Funcionario f, double percentual) {
         double aumento = (f.getSalario() * percentual) / 100;
         f.setSalario(f.getSalario() + aumento);
