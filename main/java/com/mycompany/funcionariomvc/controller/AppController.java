@@ -5,6 +5,7 @@
 package com.mycompany.funcionariomvc.controller;
 
 import com.mycompany.funcionariomvc.DAO.FuncionarioDAO;
+import com.mycompany.funcionariomvc.DAO.FuncionarioDAOMySQL;
 import com.mycompany.funcionariomvc.model.Funcionario;
 import com.mycompany.funcionariomvc.view.AppView;
 import com.mycompany.funcionariomvc.view.FuncionarioView;
@@ -22,7 +23,8 @@ public class AppController {
     private Funcionario f;
 
     public AppController() {
-        this.funcionarios = FuncionarioDAO.getFuncionarios();
+
+        this.funcionarios = FuncionarioDAOMySQL.getInstance().getFuncionarios();
         this.fv = new FuncionarioView();
         this.fc = new FuncionarioController(fv, funcionarios);
     }

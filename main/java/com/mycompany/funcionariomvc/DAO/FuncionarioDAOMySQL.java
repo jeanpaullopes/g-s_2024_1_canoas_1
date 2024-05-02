@@ -1,0 +1,93 @@
+package com.mycompany.funcionariomvc.DAO;
+
+import com.mycompany.funcionariomvc.model.Funcionario;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ *
+ * @author rafaelamoreira
+ */
+public class FuncionarioDAOMySQL extends DAOAbstract implements FuncionarioDAO{
+    private Map<Integer, Funcionario> funcionarios = new HashMap<>();
+    //private static FuncionarioDAOMySQL instance = null;
+
+    private FuncionarioDAOMySQL() {
+
+    }
+
+    public static DAOAbstract getInstance() {
+        instance = new FuncionarioDAOMySQL();
+        if (instance == null) {
+            instance = new FuncionarioDAOMySQL();
+        }
+        return instance;
+    }
+    public List<Funcionario> getFuncionarios() {
+        
+        Connection conn = DBConnection.getInstance().getConnection();
+        List<Funcionario> obj = new ArrayList<>();
+        try {
+            String sql = "select * from funcionario";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                Funcionario tmp = new Funcionario(resultSet.getInt("id"), resultSet.getString("nome"),
+                        resultSet.getInt("idade"), resultSet.getInt("salario"));
+                obj.add(tmp);
+            }
+
+        } catch (SQLException e) {
+        }
+       
+        //List<Funcionario> obj = new ArrayList<>();
+        funcionarios.values().forEach((f) -> {
+            obj.add(f);
+        });
+        return obj;
+        
+    }
+
+    public void salvarFuncionario(Funcionario f) {
+        /*
+        Connection conn = DBConnection.getInstance().getConnection();
+        try {
+            String sql = "insert into funcionario (id, nome, idade, salario) values (?, ?, ?,?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, f.getId());
+            ps.setString(2, f.getNome());
+            ps.setInt(3, f.getIdade());
+            ps.setDouble(4, f.getSalario());
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+        }
+        */
+        funcionarios.put(f.getId(), f);
+    }
+
+    public int buscaCodigo() {
+        /* 
+        Connection conn = DBConnection.getInstance().getConnection();
+        int id = 0;
+        try {
+            String sql = "select max(id) from funcionario";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet resultSet = ps.executeQuery();
+            resultSet.next();
+            id = resultSet.getInt(1);
+
+        } catch (SQLException e) {
+        }
+        return id;
+        */
+        return funcionarios.size()+1;
+    }
+}

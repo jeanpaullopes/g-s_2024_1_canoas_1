@@ -13,14 +13,16 @@ public class DBConnection {
     private static DBConnection instance = null;
     private Connection conn = null;
     private String url = "jdbc:mysql://localhost:3306/";
-    private String dbName = "mydb";
+    private String dbName = "empresa";
     private String driver = "com.mysql.jdbc.Driver";
     private DriverManager driverManager = null;
 
     private DBConnection() {
         try {
-            conn = DriverManager.getConnection(url + dbName, "root", "rafa2023");
+            conn = DriverManager.getConnection(url + dbName, "root", "senhaDoRoot");
         } catch (SQLException e) {
+            System.out.println("Erro ao conectar com o banco de dados");
+            System.out.println(e.getMessage());
         }
 
     }
