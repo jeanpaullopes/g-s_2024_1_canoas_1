@@ -23,71 +23,131 @@ public class FuncionarioDAOMySQL extends DAOAbstract implements FuncionarioDAO{
     }
 
     public static DAOAbstract getInstance() {
-        instance = new FuncionarioDAOMySQL();
         if (instance == null) {
             instance = new FuncionarioDAOMySQL();
         }
         return instance;
     }
     public List<Funcionario> getFuncionarios() {
-        
         Connection conn = DBConnection.getInstance().getConnection();
         List<Funcionario> obj = new ArrayList<>();
         try {
-            String sql = "select * from funcionario";
+            String sql = Funcionario.SELECT;
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                Funcionario tmp = new Funcionario(resultSet.getInt("id"), resultSet.getString("nome"),
-                        resultSet.getInt("idade"), resultSet.getInt("salario"));
+                System.out.println(resultSet);
+                Funcionario tmp = fromResultSet(resultSet);
                 obj.add(tmp);
             }
 
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
        
         //List<Funcionario> obj = new ArrayList<>();
-        funcionarios.values().forEach((f) -> {
-            obj.add(f);
-        });
+        //funcionarios.values().forEach((f) -> {
+        //    obj.add(f);
+        //});
         return obj;
+        
+    }
+    private void updateFuncionario(Funcionario f) {
+        Connection conn = DBConnection.getInstance().getConnection();
+        try {
+            String sql = Funcionario.UPDATE;
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            ps.setString(1, f.getNome());
+            ps.setInt(2, f.getIdade());
+            ps.setDouble(3, f.getSalario());
+            ps.setInt(4, f.getId());
+            
+
+            ps.executeUpdate();
+            
+
+        } catch (SQLException e) {
+            System.out.println("erro:"+e.getMessage());
+        }
+        
+    }
+
+    private void insertFuncionario(Funcionario f) {
+        Connection conn = DBConnection.getInstance().getConnection();
+        try {
+            String sql = Funcionario.INSERT;
+            PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            
+            ps.setString(1, f.getNome());
+            ps.setInt(2, f.getIdade());
+            ps.setDouble(3, f.getSalario());
+            ps.executeUpdate();
+            
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            generatedKeys.next();
+            int ai = generatedKeys.getInt(1);
+            System.out.println("ID: " + ai);
+            f.setId(ai);
+            
+
+        } catch (SQLException e) {
+            System.out.println("erro:"+e.getMessage());
+        }
         
     }
 
     public void salvarFuncionario(Funcionario f) {
-        /*
-        Connection conn = DBConnection.getInstance().getConnection();
-        try {
-            String sql = "insert into funcionario (id, nome, idade, salario) values (?, ?, ?,?)";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, f.getId());
-            ps.setString(2, f.getNome());
-            ps.setInt(3, f.getIdade());
-            ps.setDouble(4, f.getSalario());
-
-            ps.executeUpdate();
-
-        } catch (SQLException e) {
+        if (f.getId() == 0) {
+            insertFuncionario(f);
+        } else {
+            updateFuncionario(f);
         }
-        */
-        funcionarios.put(f.getId(), f);
+        
     }
 
     public int buscaCodigo() {
-        /* 
+         
         Connection conn = DBConnection.getInstance().getConnection();
         int id = 0;
         try {
-            String sql = "select max(id) from funcionario";
+            String sql = "select max(id) from funcionarios";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet resultSet = ps.executeQuery();
             resultSet.next();
             id = resultSet.getInt(1);
 
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return id;
-        */
-        return funcionarios.size()+1;
+        
+       
+    }
+
+    @Override
+    public Funcionario buscarFuncionario(int id) {
+        Connection conn = DBConnection.getInstance().getConnection();
+        Funcionario obj = null;
+        try {
+            String sql = Funcionario.SELECT+ " where id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                System.out.println(resultSet);
+                obj = fromResultSet(resultSet);
+                
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }  
+        return obj;  
+    }
+
+    private Funcionario fromResultSet(ResultSet resultSet) throws SQLException {
+        return new Funcionario(resultSet.getInt("id"), resultSet.getString("nome"),
+                        resultSet.getInt("idade"), resultSet.getInt("salario"));
     }
 }

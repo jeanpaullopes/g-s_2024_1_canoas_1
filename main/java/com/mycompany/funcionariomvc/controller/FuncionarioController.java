@@ -5,6 +5,7 @@
 package com.mycompany.funcionariomvc.controller;
 
 import com.mycompany.funcionariomvc.DAO.FuncionarioDAO;
+import com.mycompany.funcionariomvc.DAO.FuncionarioDAOMySQL;
 import com.mycompany.funcionariomvc.model.Funcionario;
 import com.mycompany.funcionariomvc.model.RegraNegocio;
 import com.mycompany.funcionariomvc.view.AppView;
@@ -20,20 +21,22 @@ public class FuncionarioController {
     private Funcionario f;
     private FuncionarioView fv;
     private List<Funcionario> funcionarios;
+    private FuncionarioDAO dao;
 
     //private RegraNegocio rn;
-    public FuncionarioController(FuncionarioView fv, List<Funcionario> funcionarios) {
+    public FuncionarioController(FuncionarioView fv, List<Funcionario> funcionarios,
+             FuncionarioDAO dao) {
         this.fv = fv;
         this.funcionarios = funcionarios;
+        this.dao = dao;
     }
 
     public boolean criaFuncionario() {
         boolean status = false;
-        int id = FuncionarioDAO.buscaCodigo()+1;
-        this.f = fv.inputData(id);
+        this.f = fv.inputData(null);
         if (this.f != null) {
             funcionarios.add(f);
-            FuncionarioDAO.salvarFuncionario(f);
+            dao.salvarFuncionario(f);
             status = true;
         }
         return status;

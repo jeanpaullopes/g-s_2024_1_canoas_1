@@ -5,6 +5,7 @@
 package com.mycompany.funcionariomvc.controller;
 
 import com.mycompany.funcionariomvc.DAO.FuncionarioDAO;
+import com.mycompany.funcionariomvc.DAO.FuncionarioDAOMemoria;
 import com.mycompany.funcionariomvc.DAO.FuncionarioDAOMySQL;
 import com.mycompany.funcionariomvc.model.Funcionario;
 import com.mycompany.funcionariomvc.view.AppView;
@@ -21,12 +22,17 @@ public class AppController {
     private FuncionarioView fv;
     private FuncionarioController fc;
     private Funcionario f;
+    private FuncionarioDAO dao;
 
-    public AppController() {
-
-        this.funcionarios = FuncionarioDAOMySQL.getInstance().getFuncionarios();
+    public AppController(String tipo) {
+        if (tipo.equals("mysql")){
+            this.dao = FuncionarioDAOMySQL.getInstance();
+        } else {
+            this.dao = FuncionarioDAOMemoria.getInstance();
+        }
+        this.funcionarios = dao.getFuncionarios();
         this.fv = new FuncionarioView();
-        this.fc = new FuncionarioController(fv, funcionarios);
+        this.fc = new FuncionarioController(fv, funcionarios, dao);
     }
 
     public void iniciar() {
@@ -41,14 +47,21 @@ public class AppController {
                         
                     }
                     break;
-                case 2: // listar funcionarios
+                case 2: // buscar funcionario
+                    id = fv.defineFuncionario();
+                    Funcionario ret = fv.inputData(dao.buscarFuncionario(id));
+                    System.out.println(ret.toString());
+                    dao.salvarFuncionario(ret);
+                    this.funcionarios = dao.getFuncionarios();
+                    break;
+                case 3: // listar funcionarios
                     if (!funcionarios.isEmpty()) {
                         fv.listarFuncionarios(this.funcionarios);
                     } else {
                         AppView.mostraMsgListaVazia();
                     }
                     break;
-                case 3: // atualizar funcionario
+                case 4: // atualizar funcionario
                     do {
                         op1 = AppView.menuAtualiza();
                         switch (op1) {
@@ -95,7 +108,7 @@ public class AppController {
 
                     } while (op1 > 0);
                     break;
-                case 4:
+                case 5:
                     AppView.mostraMsgFim();
                     op = -1;
                     break;

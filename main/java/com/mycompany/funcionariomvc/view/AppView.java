@@ -16,9 +16,11 @@ public class AppView {
         System.out.println("-------------------");
         System.out.println("Escolha uma opcao: ");
         System.out.println("[1] Inserir Funcionário");
-        System.out.println("[2] Listar Funcionários");
-        System.out.println("[3] Atualizar Funcionário");
-        System.out.println("[4] Sair");
+        System.out.println("[2] Editar Funcionário");
+        
+        System.out.println("[3] Listar Funcionários");
+        System.out.println("[4] Atualizar Funcionário");
+        System.out.println("[5] Sair");
         System.out.println("-------------------");
 
         return scan.nextInt();

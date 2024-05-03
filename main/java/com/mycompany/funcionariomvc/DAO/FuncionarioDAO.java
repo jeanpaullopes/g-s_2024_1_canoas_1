@@ -17,8 +17,9 @@ import java.util.Map;
 public interface FuncionarioDAO {
     
     public List<Funcionario> getFuncionarios();
-    
     public void salvarFuncionario(Funcionario f);
+    
+    public Funcionario buscarFuncionario(int id);
     public int buscaCodigo();
     
     

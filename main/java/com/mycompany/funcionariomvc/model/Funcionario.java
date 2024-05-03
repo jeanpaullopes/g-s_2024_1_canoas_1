@@ -11,6 +11,9 @@ import java.util.Date;
  * @author rafaelamoreira
  */
 public class Funcionario {
+    public static final String SELECT = "select * from funcionarios";
+    public static final String INSERT = "insert into funcionarios (nome, idade, salario) values (?, ?, ?)";
+    public static final String UPDATE = "update funcionarios set nome = ?, idade = ?, salario = ? where id = ?";
     private int id;
     private String nome;
     private int idade;
